@@ -24,14 +24,26 @@ def get_embeddings(texts: List[str]) -> List[List[float]]:
     # NOTE: Azure Open AI requires deployment id
     deployment = os.environ.get("OPENAI_EMBEDDINGMODEL_DEPLOYMENTID")
 
-    response = {}
-    if deployment == None:
-        response = openai.Embedding.create(input=texts, model="text-embedding-ada-002")
-    else:
-        response = openai.Embedding.create(input=texts, deployment_id=deployment)
+    # response = {}
+    # if deployment == None:
+    #     response = openai.Embedding.create(input=texts, model="text-embedding-ada-002")
+    # else:
+    #     response = openai.Embedding.create(input=texts, deployment_id=deployment)
 
-    # Extract the embedding data from the response
-    data = response["data"]  # type: ignore
+    # # Extract the embedding data from the response
+    # data = response["data"]  # type: ignore
+
+    # Return the embeddings as a list of lists of floats
+    #return [result["embedding"] for result in data]
+
+    data = []
+    for text in texts:
+        response = openai.Embedding.create(input=text, deployment_id=deployment)
+        #print("Response Data: " + str(response["data"]["embedding"]))
+        print("Response len: " + str(len(response["data"][0])))
+        response_data = response["data"][0]["embedding"]
+
+        data.append(response_data)
 
     # Return the embeddings as a list of lists of floats
     return [result["embedding"] for result in data]
