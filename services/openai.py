@@ -36,10 +36,14 @@ def get_embeddings(texts: List[str]) -> List[List[float]]:
     data = []
     for text in texts:
         response = openai.Embedding.create(input=text, deployment_id=deployment)
-        data.append(response["data"])
+        #print("Response len: " + str(len(response["data"][0])))
+        response_data = response["data"][0]["embedding"]
+
+        data.append(response_data)
 
     # Return the embeddings as a list of lists of floats
-    return [result["embedding"] for result in data]
+    #return [result["embedding"] for result in data]
+    return data
 
 
 @retry(wait=wait_random_exponential(min=1, max=20), stop=stop_after_attempt(3))
