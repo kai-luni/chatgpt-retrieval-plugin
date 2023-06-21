@@ -29,21 +29,14 @@ def get_embeddings(texts: List[str]) -> List[List[float]]:
     #     response = openai.Embedding.create(input=texts, model="text-embedding-ada-002")
     # else:
     #     response = openai.Embedding.create(input=texts, deployment_id=deployment)
-
+    
     # # Extract the embedding data from the response
     # data = response["data"]  # type: ignore
-
-    # Return the embeddings as a list of lists of floats
-    #return [result["embedding"] for result in data]
-
+    
     data = []
     for text in texts:
         response = openai.Embedding.create(input=text, deployment_id=deployment)
-        #print("Response Data: " + str(response["data"]["embedding"]))
-        print("Response len: " + str(len(response["data"][0])))
-        response_data = response["data"][0]["embedding"]
-
-        data.append(response_data)
+        data.append(response["data"])
 
     # Return the embeddings as a list of lists of floats
     return [result["embedding"] for result in data]
